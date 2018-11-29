@@ -1,13 +1,13 @@
 # -*- coding:utf-8 -*-
 from flask import Flask,render_template,url_for,redirect,request
-from test_mongoengine.models.user import *
+from models import User
 import xlsxwriter
 import StringIO
 from xlsxwriter.workbook import Workbook
 from flask import make_response
 import urllib2
 import xlrd
-
+import io
 app = Flask(__name__)
 
 
@@ -26,11 +26,19 @@ def export_excel(filename, office):
 def upload():
     f = request.files['file']
     # print(f)
-    filename = f.filename
-    f.save(filename)
-    old_excel = xlrd.open_workbook(filename, encoding_override="utf-8")
+    # filename = f.filename
+    # f.save(filename)
+    # old_excel = xlrd.open_workbook(filename, encoding_override="utf-8")
+
+    buffer = io.BytesIO()
+    """文件save到buffer IO流中读写，效果等同于以上注释的代码"""
+    """xrd api:https://xlrd.readthedocs.io/en/latest/api.html"""
+    f.save(buffer)
+    buffer.seek(0)
+    old_excel = xlrd.open_workbook(file_contents=buffer.getvalue())
     sh = old_excel.sheets()[0]
     row_date = sh.row_values(0)
+    print row_date
     lis = [u"序号", u"姓名", u"手机号码"]
     # if lis == row_date:
     for i in range(1, int(sh.nrows)):
