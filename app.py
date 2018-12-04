@@ -30,12 +30,15 @@ def upload():
     # f.save(filename)
     # old_excel = xlrd.open_workbook(filename, encoding_override="utf-8")
 
-    buffer = io.BytesIO()
-    """文件save到buffer IO流中读写，效果等同于以上注释的代码"""
-    """xrd api:https://xlrd.readthedocs.io/en/latest/api.html"""
-    f.save(buffer)
-    buffer.seek(0)
-    old_excel = xlrd.open_workbook(file_contents=buffer.getvalue())
+    # buffer = io.BytesIO()
+    # """文件save到buffer IO流中读写，效果等同于以上注释的代码"""
+    # """xrd api:https://xlrd.readthedocs.io/en/latest/api.html"""
+    # f.save(buffer)
+    # buffer.seek(0)
+    # old_excel = xlrd.open_workbook(file_contents=buffer.getvalue())
+    """后来发现文件并不需要放入到io流中，file对象本身就是cpython实现的io流"""
+    old_excel = xlrd.open_workbook(file_contents=f.read())
+
     sh = old_excel.sheets()[0]
     row_date = sh.row_values(0)
     print row_date
