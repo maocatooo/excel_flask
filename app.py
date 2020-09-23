@@ -1,8 +1,12 @@
 # -*- coding:utf-8 -*-
 import time
 
-import StringIO
-import urllib2
+from io import BytesIO
+
+try:
+    import urllib2
+except ImportError:
+    import urllib.parse as urllib2
 import xlrd
 from flask import Flask, render_template, request
 from flask import Response
@@ -66,15 +70,16 @@ def index():
 @app.route("/download")
 def download():
     filename = "123"
-    output = StringIO.StringIO()
+    output = BytesIO()
     office = Workbook(output)
 
     worksheet = office.add_worksheet()
     lis = [u"序号", u"姓名", u"手机号码"]
     bold = office.add_format({'bold': True})
     worksheet.write_row("A1", lis, bold)
-    users = User.objects.all()
+    users = [type("A", (object,), {"username": 1123, "pwd":123})]
     i = 2
+
     for u in users:
         array = []
         array.append(str(i - 1))

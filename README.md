@@ -21,3 +21,8 @@ old_excel = xlrd.open_workbook(file_contents=buffer.getvalue())
 ```
 old_excel = xlrd.open_workbook(file_contents=f.read())
 ```
+
+
+""" generate_large_csv() 异步下载csv文件, 问题:前端取消下载会触发socket error"""
+
+

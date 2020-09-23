@@ -9,14 +9,19 @@ except ImportError:
     class Document(object):
 
         def save(self):
-            pass
+            users.append(self)
 
+        @property
+        def objects(self):
+            return type("A", (object,), {"all": lambda *args, **kwargs: users})
 
     class StringField(object):
         pass
 
 
 connect('test', host='mongo', port=27017)  # mongo is system Hosts file
+
+users = []
 
 
 class User(Document):
